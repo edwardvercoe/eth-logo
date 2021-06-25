@@ -15,12 +15,35 @@ import * as dat from "dat.gui";
  */
 // Debug
 const gui = new dat.GUI();
+dat.GUI.toggleHide();
 const parameters = {
   color: 0x20202,
 };
 const debugObject = {};
 
-const loadingManager = new THREE.LoadingManager();
+/**
+ * Loaders
+ */
+const loadingSVG = document.querySelector(".loading-svg");
+const loadingLeftElement = document.querySelector(".loading-left");
+const loadingRightElement = document.querySelector(".loading-right");
+const loadingBorder = document.querySelector(".loading-border");
+
+const loadingManager = new THREE.LoadingManager(
+  // loaded
+  () => {
+    console.log("loaded");
+    loadingLeftElement.classList.add("ended");
+    loadingRightElement.classList.add("ended");
+    loadingSVG.classList.add("ended");
+    loadingBorder.classList.add("ended");
+    window.setTimeout(() => {
+      dat.GUI.toggleHide();
+    }, 2000);
+  },
+  // progress
+  (itemUrl, itemsLoaded, itemsTotal) => {}
+);
 
 const textureLoader = new THREE.TextureLoader(loadingManager);
 const normalTexture = textureLoader.load(
@@ -239,7 +262,7 @@ gui.add(bloomPass, "strength").min(0).max(1).step(0.01);
 
 const glitchPass = new GlitchPass();
 // glitchPass.goWild = true;
-// glitchPass.enabled = false;
+glitchPass.enabled = false;
 effectComposer.addPass(glitchPass);
 
 /**
