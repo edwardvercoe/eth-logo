@@ -4,22 +4,58 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>3D Ethereum model</title>
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
   </head>
   <body>
     <div class="wrapper">
       <canvas class="webgl"></canvas>
       <div class="loader-container">
         <div class="modal-btn">
-          <img src="./images/ethbtn.png" alt="broken img" />
+          <img src="/src/images/ethbtn.png" alt="broken img" />
         </div>
         <div class="loading-left"></div>
         <div class="loading-right"></div>
         <div class="loading-border"></div>
 
         <div class="loading-svg">
-          <img src="./images/spinner.svg" alt="spinner" />
+          <img src="/src/images/spinner.svg" alt="spinner" />
+        </div>
+      </div>
+
+      <div class="modal">
+        <div class="modal-outer"></div>
+        <div class="modal-inner">
+          <h2>Aren't you the curious one...</h2>
+          <hr />
+          <br />
+          <p>This web experience was developed by <a href="https://github.com/edwardvercoe">Edward Vercoe</a> as an exercise to learn more about Three.js, a javascript library used to create and display animated 3D computer graphics in a web browser using WebGL.</p>
+          <br />
+          <p>I am currently progressing through the "Three.js journey" course by <a href="https://twitter.com/bruno_simon">Bruno Simon</a>. If you would like to learn Three.js I'd highly recommend this course!</p>
+          <br />
+          <p>Ethereum model by <a href="https://sketchfab.com/akimovcg">akimovcg</a>.</p>
+          <br />
+          <p>If you would like to support my work & learning development feel free to assist in the following ways:</p>
+          <div class="modal-footer">
+            <div class="btn-container">
+              <a target="_blank" href="https://www.paypal.com/donate?business=2XSU4LU4C9LGG&no_recurring=0&currency_code=AUD" class="button primary">Paypal</a>
+              <a href="#" class="button secondary btn-eth">Ethereum Address</a>
+            </div>
+          </div>
+          <div class="close-icon">+</div>
         </div>
       </div>
     </div>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NWP5Z45GND"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "G-NWP5Z45GND");
+    </script>
   </body>
 </html>

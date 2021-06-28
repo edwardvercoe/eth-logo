@@ -7,8 +7,12 @@ import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
 import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass";
 import { GlitchPass } from "three/examples/jsm/postprocessing/GlitchPass.js";
-
+import copy from "copy-to-clipboard";
 import * as dat from "dat.gui";
+
+if (process.env.NODE_ENV === "development") {
+  require("./index.html");
+}
 
 /**
  * Base
@@ -28,11 +32,37 @@ const loadingSVG = document.querySelector(".loading-svg");
 const loadingLeftElement = document.querySelector(".loading-left");
 const loadingRightElement = document.querySelector(".loading-right");
 const loadingBorder = document.querySelector(".loading-border");
+const modalButton = document.querySelector(".modal-btn");
+const modal = document.querySelector(".modal");
+const modalOuter = document.querySelector(".modal-outer");
+const closeIcon = document.querySelector(".close-icon");
+const btnEth = document.querySelector(".btn-eth");
+
+// Canvas
+const canvas = document.querySelector("canvas.webgl");
+
+modalButton.addEventListener("click", () => {
+  modal.classList.add("active");
+});
+
+modalOuter.addEventListener("click", () => {
+  modal.classList.remove("active");
+});
+
+closeIcon.addEventListener("click", () => {
+  modal.classList.remove("active");
+});
+
+btnEth.addEventListener("click", (event) => {
+  event.preventDefault();
+  copy("0xbbed09a7de1be5db5cc0475a501a2bcd069066a8");
+  alert("Ethereum address has been copied to your clipboard! (0xbbed09a7de1be5db5cc0475a501a2bcd069066a8)");
+});
 
 const loadingManager = new THREE.LoadingManager(
   // loaded
   () => {
-    console.log("loaded");
+    // console.log("loaded");
     loadingLeftElement.classList.add("ended");
     loadingRightElement.classList.add("ended");
     loadingSVG.classList.add("ended");
@@ -46,19 +76,13 @@ const loadingManager = new THREE.LoadingManager(
 );
 
 const textureLoader = new THREE.TextureLoader(loadingManager);
-const normalTexture = textureLoader.load(
-  "/models/ethereum_3d_logo/normal.jpeg"
-);
-const specMap = textureLoader.load(
-  "/models/ethereum_3d_logo/textures/default_specularGlossiness.png"
-);
+const normalTexture = textureLoader.load("/static/models/ethereum_3d_logo/normal.jpeg");
+const specMap = textureLoader.load("/static/models/ethereum_3d_logo/textures/default_specularGlossiness.png");
 
 normalTexture.offset.x = 0.5;
 normalTexture.offset.y = 0.5;
 normalTexture.wrapS = THREE.RepeatWrapping;
 normalTexture.wrapT = THREE.RepeatWrapping;
-// Canvas
-const canvas = document.querySelector("canvas.webgl");
 
 // Scene
 const scene = new THREE.Scene();
@@ -68,10 +92,7 @@ const scene = new THREE.Scene();
  */
 const updateAllMaterials = () => {
   scene.traverse((child) => {
-    if (
-      child instanceof THREE.Mesh &&
-      child.material instanceof THREE.MeshPhongMaterial
-    ) {
+    if (child instanceof THREE.Mesh && child.material instanceof THREE.MeshPhongMaterial) {
       child.material.envMapIntensity = 10;
       child.material.needsUpdate = true;
     }
@@ -91,7 +112,7 @@ let ethModel;
 // texure loader
 
 gltfLoader.load(
-  "/models/ethereum_3d_logo/scene.gltf",
+  "/static/models/ethereum_3d_logo/scene.gltf",
   (gltf) => {
     ethModel = gltf.scene;
     ethModel.scale.set(0.005, 0.005, 0.005);
@@ -111,25 +132,13 @@ gltfLoader.load(
         o.material = newMaterial;
       }
     });
-    // console.log(ethModel);
-
-    //  Change color of ma
-    // ethModel.traverse((o) => {
-    //   if (o.isMesh) {
-    //     // o.material._extraUniforms.specular.value = new THREE.Color(0x000000);
-    //     o.material.color = new THREE.Color(0x242526);
-    //     // o.material.wireframe = true;
-    //   }
-
-    //   console.log(o.material, " <---");
-    // });
 
     scene.add(gltf.scene);
     updateAllMaterials();
     updateGui();
   },
   (progress) => {
-    console.log("Loading...");
+    // console.log("Loading...");
   }
 );
 
@@ -205,17 +214,14 @@ window.addEventListener("resize", () => {
  * Camera
  */
 // Base camera
-const camera = new THREE.PerspectiveCamera(
-  75,
-  sizes.width / sizes.height,
-  0.1,
-  100
-);
+const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100);
 camera.position.set(1, 2, 5);
 scene.add(camera);
 
 // Controls
 const controls = new OrbitControls(camera, canvas);
+controls.enableZoom = false;
+controls.enablePan = false;
 controls.target.set(0, 0.75, 0);
 controls.enableDamping = true;
 
@@ -262,8 +268,10 @@ gui.add(bloomPass, "strength").min(0).max(1).step(0.01);
 
 const glitchPass = new GlitchPass();
 // glitchPass.goWild = true;
-glitchPass.enabled = false;
+glitchPass.enabled = true;
 effectComposer.addPass(glitchPass);
+
+gui.add(glitchPass, "enabled").name("Glitch effect");
 
 /**
  * Animate
@@ -278,6 +286,7 @@ const tick = () => {
 
   if (ethModel) {
     ethModel.rotation.y = 0.5 * elapsedTime;
+    ethModel.position.y = 0.7 + Math.sin(1 * elapsedTime) * 0.15;
   }
 
   // update mixer
