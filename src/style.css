@@ -100,6 +100,9 @@ img {
   margin: 1.25rem 1.5rem;
   position: relative;
 }
+h2 {
+  margin-bottom: 10px;
+}
 
 .modal-inner p {
   color: rgb(59, 59, 59);
@@ -156,6 +159,14 @@ img {
 }
 
 @media only screen and (max-width: 600px) {
+  h2 {
+    font-size: 1rem;
+  }
+
+  .button {
+    padding: 0.5rem 1rem;
+    margin: 0.25rem;
+  }
   .modal-inner {
     font-size: 0.75rem;
     max-width: 100%;
