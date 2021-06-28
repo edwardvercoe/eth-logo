@@ -76,8 +76,8 @@ const loadingManager = new THREE.LoadingManager(
 );
 
 const textureLoader = new THREE.TextureLoader(loadingManager);
-const normalTexture = textureLoader.load("/static/models/ethereum_3d_logo/normal.jpeg");
-const specMap = textureLoader.load("/static/models/ethereum_3d_logo/textures/default_specularGlossiness.png");
+const normalTexture = textureLoader.load("/public/models/ethereum_3d_logo/normal.jpeg");
+const specMap = textureLoader.load("/public/models/ethereum_3d_logo/textures/default_specularGlossiness.png");
 
 normalTexture.offset.x = 0.5;
 normalTexture.offset.y = 0.5;
@@ -112,7 +112,7 @@ let ethModel;
 // texure loader
 
 gltfLoader.load(
-  "/static/models/ethereum_3d_logo/scene.gltf",
+  "/public/models/ethereum_3d_logo/scene.gltf",
   (gltf) => {
     ethModel = gltf.scene;
     ethModel.scale.set(0.005, 0.005, 0.005);
