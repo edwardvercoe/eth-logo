@@ -10,6 +10,15 @@ body {
   font-family: "Poppins", sans-serif;
 }
 
+body {
+  /* mobile viewport bug fix */
+  min-height: -webkit-fill-available;
+}
+
+html {
+  height: -webkit-fill-available;
+}
+
 .webgl {
   position: fixed;
   top: 0;
@@ -50,11 +59,28 @@ img {
   bottom: -50%;
   width: 1.25em;
   transform: translate3d(-525%, 0, 0) rotate(35deg);
+  animation-duration: 5s;
+  animation-name: shine;
+  animation-iteration-count: infinite;
+  animation-direction: normal;
 }
 
 .modal-btn:hover::after {
   transition: transform 0.45s ease-in-out;
   transform: translate3d(200%, 0, 0) rotate(35deg);
+}
+
+@keyframes shine {
+  0% {
+    transform: translate3d(-525%, 0, 0) rotate(35deg);
+  }
+
+  10% {
+    transform: translate3d(200%, 0, 0) rotate(35deg);
+  }
+  100% {
+    transform: translate3d(200%, 0, 0) rotate(35deg);
+  }
 }
 
 .modal {
@@ -197,6 +223,7 @@ a {
   transform: translate(-50%, -50%);
   transition: opacity 0.5s ease, top 0.5s ease;
   opacity: 1;
+  z-index: 999;
 }
 .loading-svg img {
   width: 100%;
